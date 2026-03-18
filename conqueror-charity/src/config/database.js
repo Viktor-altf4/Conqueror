@@ -47,4 +47,15 @@ function dbAll(sql, params) {
   });
 }
 
-module.exports = { getDb, dbRun, dbGet, dbAll };
+function closeDb() {
+  return new Promise((resolve, reject) => {
+    if (!db) return resolve();
+    db.close((err) => {
+      if (err) return reject(err);
+      db = null;
+      resolve();
+    });
+  });
+}
+
+module.exports = { getDb, dbRun, dbGet, dbAll, closeDb };

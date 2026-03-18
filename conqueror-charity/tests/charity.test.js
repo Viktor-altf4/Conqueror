@@ -9,7 +9,7 @@ process.env.CHARITY_MIN_AMOUNT_CENTS = '50';
 
 const request = require('supertest');
 const app = require('../src/server');
-const { dbRun, dbAll } = require('../src/config/database');
+const { dbRun, dbAll, closeDb } = require('../src/config/database');
 
 let adminToken, userToken, createdOrderId;
 
@@ -69,6 +69,7 @@ afterAll(async () => {
   // Clean up test DB tables
   const tables = ['charity_disbursements','charity_ledger','order_items','orders','products','users','charity_config'];
   for (const t of tables) await dbRun(`DROP TABLE IF EXISTS ${t}`);
+  await closeDb();
   require('fs').existsSync('./test.db') && require('fs').unlinkSync('./test.db');
 });
 

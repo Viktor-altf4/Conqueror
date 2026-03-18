@@ -46,7 +46,12 @@ async function seed() {
   }
 
   console.log('Seed complete.');
-  process.exit(0);
 }
 
-seed().catch(e => { console.error('Seed failed:', e); process.exit(1); });
+if (require.main === module) {
+  seed()
+    .then(() => process.exit(0))
+    .catch(e => { console.error('Seed failed:', e); process.exit(1); });
+}
+
+module.exports = seed;

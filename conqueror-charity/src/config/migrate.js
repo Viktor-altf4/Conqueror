@@ -127,7 +127,13 @@ async function migrate() {
   }
 
   console.log('Migrations complete.');
-  process.exit(0);
 }
 
-migrate().catch(e => { console.error('Migration failed:', e); process.exit(1); });
+// Only auto-run and exit when executed directly (not when require()'d by tests)
+if (require.main === module) {
+  migrate()
+    .then(() => process.exit(0))
+    .catch(e => { console.error('Migration failed:', e); process.exit(1); });
+}
+
+module.exports = migrate;
